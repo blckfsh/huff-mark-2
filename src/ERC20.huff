@@ -22,14 +22,14 @@
 #define macro BURN() = takes (0) returns (0) {
     NON_PAYABLE()
     // Setup the stack for the burn function.
-    0x04 calldataload       // [from]
-    0x24 calldataload       // [value, from]
+    0x04 calldataload   // [from]
+    0x24 calldataload   // [value, from]
 
     // Call ERC20.huff's _BURN macro
-    _BURN()                 // []
+    _BURN()             // []
 
     // Stop Execution
-    stop                    // []    
+    stop                // []
 }
 
 /// @notice Mint
@@ -39,26 +39,26 @@
     NON_PAYABLE()
 
     // Setup the stack for the mint function.
-    0x04 calldataload       // [to]
-    0x24 calldataload       // [value, to]
+    0x04 calldataload   // [to]
+    0x24 calldataload   // [value, to]
 
     // Call ERC20.huff's _MINT macro
-    _MINT()                 // []
+    _MINT()             // []
 
     // Stop Execution
-    stop                    // []
+    stop                // []
 }
 
 // The main function dispatcher
 #define macro MAIN() = takes (0) returns (0) {
     // Load the function selector
-    pc calldataload 0xE0 shr                // [sig]
+    pc calldataload 0xE0 shr    // [sig]
 
     dup1 __FUNC_SIG(mint) eq mint jumpi
     dup1 __FUNC_SIG(burn) eq burn jumpi
 
     // Use the builtin erc20 dispatcher
-    ERC20_MAIN()                            // [sig]
+    ERC20_MAIN()                // [sig]
 
     // Revert if we don't recognize the function selector
     0x00 dup1 revert
@@ -68,4 +68,3 @@
     burn:
         BURN()
 }
-
